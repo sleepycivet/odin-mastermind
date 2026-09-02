@@ -13,12 +13,27 @@ class Game
     puts " "
     puts "#{correct} means that there is one correct color in the correct place"
     puts "#{almost_correct} means that there is one correct color but in the wrong place"
+    puts " "
+    puts "Good luck!"
+    puts "**********"
+
+    create_code
   end
 
 
-  protected
-  @COLORS = ["R", "G", "B", "C", "M", "Y"]
+  def create_code
+    code = []
+    colors = ["R", "G", "B", "C", "M", "Y"]
+    4.times do
+      code.push(colors[rand(6)])
+    end
+    puts "The secret code is #{code}"
+    return code
+  end
 
+  protected
+
+  # This can probably be broken out into its own class?
   def red
     return "R".colorize(:background => :red)
   end
@@ -48,10 +63,9 @@ class Game
   end
 
   def almost_correct
-    return "X".colorize(:red).colorize(:background => :white)
+    return ColorizedString["X"].colorize(:black).colorize(:background => :light_red)
   end
 end
-
 
 # Colors: R, G, B, C, M, Y
 
