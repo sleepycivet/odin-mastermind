@@ -40,9 +40,8 @@ class Game
   end
 
   def convert_to_colored_text (array)
-    p array
     color_string = ""
-    array.each do |element|
+    array.each_with_index do |element, index|
       case element
       when 'R'
         color_string.concat("#{red}")
@@ -56,6 +55,10 @@ class Game
         color_string.concat("#{magenta}")
       when 'Y'
         color_string.concat("#{yellow}")
+      end
+
+      if index < (array.length - 1)
+        color_string.concat (" | ")
       end
     end
     return color_string
