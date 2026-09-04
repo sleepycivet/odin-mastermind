@@ -5,8 +5,30 @@ class Game
   def start_game
     display_game_rules
     code = create_code
-    guess = prompt_input
-    puts "Guess ##{@guesses_count}: " +  convert_to_colored_text(guess) + " = Hint: " + convert_hint_to_colored_text(check_guess_to_code(code, guess))
+    guess = nil
+
+    loop do
+      while guess.class != Array do
+        guess = prompt_input
+      end
+
+      @guesses_count += 1
+
+      puts "Guess ##{@guesses_count}: " +  convert_to_colored_text(guess) + " = Hint: " + convert_hint_to_colored_text(check_guess_to_code(code, guess))
+
+      break if @guesses_count == 13 || check_guess_to_code(code, guess) == ["O", "O", "O", "O"]
+
+      guess = nil
+    end
+
+    if check_guess_to_code(code, guess) == ["O", "O", "O", "O"]
+      puts "Congrats! You win!"
+    elsif @guesses_count == 13
+      puts "You weren't able to guess the code in 12 tries. ;_;"
+    end
+
+    puts "The code was #{convert_to_colored_text(code)}"
+    @guesses_count = 0
   end
 
   def check_guess_to_code(code_arr, guess_arr)
@@ -93,7 +115,7 @@ class Game
   protected
 
   def initialize
-    @guesses_count = 1
+    @guesses_count = 0
   end
 
   # This can probably be broken out into its own class?
@@ -132,7 +154,7 @@ class Game
   def display_game_rules
     puts "WELCOME TO MASTERMIND!"
     puts " "
-    puts "This is a game where you guess a secret code comprised of four of the following colors (and order matters):"
+    puts "This is a game where you have 12 attempts to guess a secret code comprised of four of the following colors (and order matters):"
     puts " "
     puts "Red (#{red}), Green (#{green}), Blue (#{blue}), Cyan (#{cyan}), Magenta(#{magenta}), and Yellow (#{yellow})."
     puts " "
@@ -145,7 +167,3 @@ class Game
     puts "**********"
   end
 end
-
-# Colors: R, G, B, C, M, Y
-
-# Guess 01: R | _ | _ | _
