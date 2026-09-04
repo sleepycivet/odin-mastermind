@@ -18,7 +18,7 @@ class Game
     puts "**********"
 
     create_code
-    prompt_input
+    puts convert_to_colored_text(prompt_input)
   end
 
   def prompt_input
@@ -27,16 +27,38 @@ class Game
     begin
       input = gets.upcase.chomp
       input = input.split('')
-      p input
     rescue
       puts "Not a valid input."
     else
       if input.length == 4 && colors.include?(input[0]) && colors.include?(input[1]) && colors.include?(input[2]) && colors.include?(input[3])
-        p "Yay you actually put in a legit guess"
+        # p "Yay you actually put in a legit guess"
+        return input
       else
         puts "Not a valid input."
       end
     end
+  end
+
+  def convert_to_colored_text (array)
+    p array
+    color_string = ""
+    array.each do |element|
+      case element
+      when 'R'
+        color_string.concat("#{red}")
+      when 'G'
+        color_string.concat("#{green}")
+      when 'B'
+        color_string.concat("#{blue}")
+      when 'C'
+        color_string.concat("#{cyan}")
+      when 'M'
+        color_string.concat("#{magenta}")
+      when 'Y'
+        color_string.concat("#{yellow}")
+      end
+    end
+    return color_string
   end
 
   def create_code
