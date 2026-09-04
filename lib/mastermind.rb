@@ -7,7 +7,7 @@ class Game
     puts " "
     puts "This is a game where you guess a secret code comprised of four of the following colors (and order matters):"
     puts " "
-    puts "Red (#{red}), Green (#{green}), Blue (#{blue})), Cyan (#{cyan}), Magenta(#{magenta}), and Yellow (#{yellow})."
+    puts "Red (#{red}), Green (#{green}), Blue (#{blue}), Cyan (#{cyan}), Magenta(#{magenta}), and Yellow (#{yellow})."
     puts " "
     puts "Of course, you will need a way to know how close your guess is to the answer. After each guess you will be shown the following markers. The position of these markers do not correlate with the positions of the guess."
     puts " "
@@ -18,8 +18,26 @@ class Game
     puts "**********"
 
     create_code
+    prompt_input
   end
 
+  def prompt_input
+    colors = ["R", "G", "B", "C", "M", "Y"]
+    puts "Please enter four of the following letters for your guess #{red}, #{green}, #{blue}, #{cyan}, #{magenta}, or #{yellow})."
+    begin
+      input = gets.upcase.chomp
+      input = input.split('')
+      p input
+    rescue
+      puts "Not a valid input."
+    else
+      if input.length == 4 && colors.include?(input[0]) && colors.include?(input[1]) && colors.include?(input[2]) && colors.include?(input[3])
+        p "Yay you actually put in a legit guess"
+      else
+        puts "Not a valid input."
+      end
+    end
+  end
 
   def create_code
     code = []
@@ -30,6 +48,7 @@ class Game
     puts "The secret code is #{code}"
     return code
   end
+
 
   protected
 
