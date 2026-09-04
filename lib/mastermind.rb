@@ -7,21 +7,24 @@ class Game
     code = create_code
     guess = prompt_input
     puts "Guess ##{@guesses_count}: " +  convert_to_colored_text(guess)
-    is_guess_correct?(code, guess)
+    check_guess_to_code(code, guess)
   end
 
-  def is_guess_correct?(code_arr, guess_arr)
+  def check_guess_to_code(code_arr, guess_arr)
     puts "in is_guess_correct?"
-    is_correct = true
+    hints_array = []
+
     guess_arr.each_with_index do |element, index|
-      puts "looking at element #{element} at index #{index}"
-      if element != code_arr[index]
-        puts "ooo is_correct is false"
-        is_correct = false
+      puts "looking at element #{element} at index #{index} and code_arr at the same index is #{code_arr[index]}"
+      if element == code_arr[index]
+        hints_array.push("O")
+      elsif code_arr.include?(element)
+        hints_array.push("-")
+      else
+        hints_array.push("X")
       end
     end
-    puts "at the end, is_correct == #{is_correct}"
-    return is_correct
+    return hints_array.shuffle!
   end
 
   def prompt_input
