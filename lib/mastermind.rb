@@ -6,16 +6,13 @@ class Game
     display_game_rules
     code = create_code
     guess = prompt_input
-    puts "Guess ##{@guesses_count}: " +  convert_to_colored_text(guess)
-    check_guess_to_code(code, guess)
+    puts "Guess ##{@guesses_count}: " +  convert_to_colored_text(guess) + " = Hint: " + convert_hint_to_colored_text(check_guess_to_code(code, guess))
   end
 
   def check_guess_to_code(code_arr, guess_arr)
-    puts "in is_guess_correct?"
     hints_array = []
 
     guess_arr.each_with_index do |element, index|
-      puts "looking at element #{element} at index #{index} and code_arr at the same index is #{code_arr[index]}"
       if element == code_arr[index]
         hints_array.push("O")
       elsif code_arr.include?(element)
@@ -42,6 +39,19 @@ class Game
         puts "Not a valid input."
       end
     end
+  end
+
+  def convert_hint_to_colored_text(array)
+    color_string = ""
+    array.each do |element|
+      case element
+      when 'O'
+        color_string.concat("#{correct}")
+      when '-'
+        color_string.concat("#{almost_correct}")
+      end
+    end
+    return color_string
   end
 
   def convert_to_colored_text (array)
