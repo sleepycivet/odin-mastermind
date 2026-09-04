@@ -107,7 +107,7 @@ class Game
     4.times do
       code.push(colors[rand(6)])
     end
-    puts "The secret code is #{convert_to_colored_text(code)}"
+    # puts "The secret code is #{convert_to_colored_text(code)}"
     return code
   end
 
