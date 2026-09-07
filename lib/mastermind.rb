@@ -30,6 +30,33 @@ class Game
     puts "The code was #{convert_to_colored_text(code)}"
     @guesses_count = 0
   end
+  
+  def generate_codes
+    count = 0
+    possible_codes =[]
+    while count < 9999
+      has_789 = false
+      count += 1
+      temp_number = count.to_s.split("")
+
+      while temp_number.length < 4 do
+        temp_number.unshift("0")
+      end
+
+      temp_number.map!{|element| element.to_i}
+      
+      temp_number.each do |element|
+        if element > 6
+          has_789 = true
+        end
+      end
+      if has_789 == false
+        possible_codes.push(temp_number)
+      end
+    end
+    # print possible_codes.map{|element| element.join("").to_i}
+    return possible_codes
+  end
 
   def check_guess_to_code(code_arr, guess_arr)
     hints_array = []
