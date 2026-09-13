@@ -3,7 +3,7 @@ require_relative './colorize'
 module Text
   include Colorize
 
-  def text_prompt_input
+  def text_prompt_guess
     puts "Please enter four of the following letters for your guess #{colorize_red}, #{colorize_green}, #{colorize_blue}, #{colorize_cyan}, #{colorize_magenta}, or #{colorize_yellow})."
   end
 

@@ -3,20 +3,23 @@ require 'colorized_string'
 require_relative './mastermind/text'
 require_relative './mastermind/colorize'
 require_relative 'mastermind/convert'
+require_relative 'mastermind/prompt'
 
 class Game
   include Text
   include Colorize
   include Convert
+  include Prompt
 
   def start_game
     text_game_rules
+
     code = create_code
     guess = nil
 
     loop do
       while guess.class != Array do
-        guess = prompt_input
+        guess = prompt_guess
       end
 
       @guesses_count += 1
@@ -164,28 +167,11 @@ class Game
     return hints_array.shuffle!
   end
 
-  def prompt_input
-    text_prompt_input
-    begin
-      input = gets.upcase.chomp
-      input = input.split('')
-    rescue
-      puts "Not a valid input."
-    else
-      if input.length == 4 && COLORS.include?(input[0]) && COLORS.include?(input[1]) && COLORS.include?(input[2]) && COLORS.include?(input[3])
-        return input
-      else
-        puts "Not a valid input."
-      end
-    end
-  end
-
   def create_code
     code = []
     4.times do
       code.push(COLORS[rand(6)])
     end
-    # puts "The secret code is #{convert_to_colored_text(code)} which is #{convert_colors_to_indices(code)}"
     return code
   end
 
