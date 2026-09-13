@@ -1,11 +1,11 @@
 require 'colorize'
 require 'colorized_string'
 require_relative './mastermind/text'
-require_relative './mastermind/display'
+require_relative './mastermind/colorize'
 
 class Game
   include Text
-  include Display
+  include Colorize
 
   def start_game
     text_game_rules
@@ -225,46 +225,6 @@ class Game
         puts "Not a valid input."
       end
     end
-  end
-
-  def convert_hint_to_colored_text(array)
-    color_string = ""
-    array.each do |element|
-      case element
-      when 'O'
-        color_string.concat("#{display_correct}")
-      when '-'
-        color_string.concat("#{display_almost_correct}")
-      when 'X'
-        color_string.concat("#{display_wrong}")
-      end
-    end
-    return color_string
-  end
-
-  def convert_to_colored_text (array)
-    color_string = ""
-    array.each_with_index do |element, index|
-      case element
-      when 'R'
-        color_string.concat("#{display_red}")
-      when 'G'
-        color_string.concat("#{display_green}")
-      when 'B'
-        color_string.concat("#{display_blue}")
-      when 'C'
-        color_string.concat("#{display_cyan}")
-      when 'M'
-        color_string.concat("#{display_magenta}")
-      when 'Y'
-        color_string.concat("#{display_yellow}")
-      end
-
-      if index < (array.length - 1)
-        color_string.concat (" | ")
-      end
-    end
-    return color_string
   end
 
   def create_code
