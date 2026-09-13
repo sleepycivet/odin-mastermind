@@ -25,17 +25,17 @@ RSpec.describe 'Mastermind Game' do
     it 'should be 4 digits long' do
       expect(subject.generate_codes[10].length).to eq(4)
     end
-    it 'should not include digits 7, 8, or 9' do
+    it 'should not include digits 6, 7, 8, or 9' do
       guesses = subject.generate_codes
-      has_789 = false
+      has_6789 = false
       guesses.each do |element|
         element.each do |item|
           if item > 6
-            has_789 = true
+            has_6789 = true
           end
         end
       end
-      expect(has_789).to eq(false)
+      expect(has_6789).to eq(false)
     end
   end
   describe 'computer guesses player code' do
