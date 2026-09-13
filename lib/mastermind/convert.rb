@@ -2,6 +2,7 @@ require_relative 'colorize'
 
 module Convert
   include Colorize
+  COLORS = ["R", "G", "B", "C", "M", "Y"]
 
   def convert_hint_to_colored_text(array)
     color_string = ""
@@ -9,9 +10,9 @@ module Convert
       case element
       when 'O'
         color_string.concat("#{colorize_correct}")
-      when '-'
-        color_string.concat("#{colorize_almost_correct}")
       when 'X'
+        color_string.concat("#{colorize_almost_correct}")
+      when '-'
         color_string.concat("#{colorize_wrong}")
       end
     end
@@ -41,6 +42,23 @@ module Convert
       end
     end
     return color_string
+  end
+
+  def convert_indices_to_colors(array)
+    color_array = []
+
+    array.each do |element|
+      color_array.push(COLORS[element])
+    end
+    return color_array
+  end
+
+  def convert_colors_to_indices(array)
+    indices_array = []
+      array.each do |element|
+      indices_array.push(COLORS.find_index(element))
+    end
+    return indices_array
   end
 
 end

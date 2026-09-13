@@ -2,10 +2,12 @@ require 'colorize'
 require 'colorized_string'
 require_relative './mastermind/text'
 require_relative './mastermind/colorize'
+require_relative 'mastermind/convert'
 
 class Game
   include Text
   include Colorize
+  include Convert
 
   def start_game
     text_game_rules
@@ -94,8 +96,8 @@ class Game
       if check_guess_to_code(code,computer_answer) == ['O', 'O', 'O', 'O']
         puts " it was ['O', 'O', 'O', 'O'] so yaaaay it's correct"
         is_guess_correct = true
-      elsif check_guess_to_code(code,computer_answer) == ['X', 'X', 'X', 'X']
-        puts "it was ['X', 'X', 'X', 'X']"
+      elsif check_guess_to_code(code,computer_answer) == ['-', '-', '-', '-']
+        puts "it was ['-', '-', '-', '-']"
         indiced_computer_answer = convert_colors_to_indices(computer_answer)
 
         guesses_with_wrongs = []
@@ -176,25 +178,7 @@ class Game
     return computer_answer
   end
 
-  def convert_indices_to_colors(array)
-    colors = ["R", "G", "B", "C", "M", "Y"]
-    color_array = []
-
-    array.each do |element|
-      color_array.push(colors[element])
-    end
-    return color_array
-  end
-
-  def convert_colors_to_indices(array)
-    colors = ["R", "G", "B", "C", "M", "Y"]
-    indices_array = []
-      array.each do |element|
-      indices_array.push(colors.find_index(element))
-    end
-    return indices_array
-  end
-
+  # TODO:// FIX THIS BRO
   def check_guess_to_code(code_arr, guess_arr)
     hints_array = []
     
@@ -202,16 +186,15 @@ class Game
       if element == code_arr[index]
         hints_array.push("O")
       elsif code_arr.include?(element)
-        hints_array.push("-")
-      else
         hints_array.push("X")
+      else
+        hints_array.push("-")
       end
     end
     return hints_array.shuffle!
   end
 
   def prompt_input
-    colors = ["R", "G", "B", "C", "M", "Y"]
     text_prompt_input
     begin
       input = gets.upcase.chomp
@@ -219,7 +202,7 @@ class Game
     rescue
       puts "Not a valid input."
     else
-      if input.length == 4 && colors.include?(input[0]) && colors.include?(input[1]) && colors.include?(input[2]) && colors.include?(input[3])
+      if input.length == 4 && COLORS.include?(input[0]) && COLORS.include?(input[1]) && COLORS.include?(input[2]) && COLORS.include?(input[3])
         return input
       else
         puts "Not a valid input."
@@ -229,16 +212,16 @@ class Game
 
   def create_code
     code = []
-    colors = ["R", "G", "B", "C", "M", "Y"]
     4.times do
-      code.push(colors[rand(6)])
+      code.push(COLORS[rand(6)])
     end
-    # puts "The secret code is #{convert_to_colored_text(code)}"
+    puts "The secret code is #{convert_to_colored_text(code)}"
     return code
   end
 
 
   protected
+  COLORS = ["R", "G", "B", "C", "M", "Y"]
 
   def initialize
     @guesses_count = 0
