@@ -20,13 +20,13 @@ RSpec.describe 'Mastermind Game' do
   end
   describe 'create code guesses' do
     it 'should be an array' do
-      expect(subject.generate_codes).to be_an_instance_of(Array)
+      expect(subject.generate_guesses).to be_an_instance_of(Array)
     end
     it 'should be 4 digits long' do
-      expect(subject.generate_codes[10].length).to eq(4)
+      expect(subject.generate_guesses[10].length).to eq(4)
     end
     it 'should not include digits 6, 7, 8, or 9' do
-      guesses = subject.generate_codes
+      guesses = subject.generate_guesses
       has_6789 = false
       guesses.each do |element|
         element.each do |item|
@@ -46,6 +46,10 @@ RSpec.describe 'Mastermind Game' do
     it 'should create an indices array from color array' do
       test_color_array = ["R", "C", "G", "R"]
       expect(subject.convert_colors_to_indices(test_color_array)).to eq([0,3,1,0])
+    end
+    it 'should stop when the guess matches the code' do
+      test_code = ["R", "C", "G", "R"]
+      expect(subject.computer_guess(test_code)).to eq(test_code)
     end
     it 'should stop when the guess matches the code' do
       test_code = subject.create_code

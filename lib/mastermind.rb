@@ -38,7 +38,7 @@ class Game
     @guesses_count = 0
   end
   
-  def generate_codes
+  def generate_guesses
     # The solution says 1111 to 6666 but, taking into account that indices start from 0, our range would actually be from 0000 to 5555
     count = 0
     possible_codes =[]
@@ -63,134 +63,104 @@ class Game
       end
     end
     possible_codes.unshift([0,0,0,0])
-    # print possible_codes.map{|element| element.join("")}
     return possible_codes
   end
 
   def computer_guess(code)
-    computer_answer = nil
     is_guess_correct = false
-  
-    guesses = generate_codes
-    puts "guess starts as #{guesses.length} long"
-    # print guesses.map{|element| element.join("").to_i}
+    guess = nil # actual value
+    guesses_count = 1
+    combination_array = []
+
+    # Create a guesses array of all possible codes
+    guesses = generate_guesses
+    puts "guesses.length = #{guesses.length}"
 
     while is_guess_correct == false do
-      puts "while!"
-      puts "computer_answer = #{computer_answer}"
 
-      if computer_answer == nil
-        puts "computer_answer == nil"
-        computer_answer = convert_indices_to_colors([1,1,2,2])
+      if guess == nil
+        # If it's the first guess, use [1,1,2,2]
+        guess = [1,1,2,2]
       else
-        puts "computer_answer != nil"
-        random_guess = guesses[rand(guesses.length - 1)]
-        puts "random_guess = #{random_guess}"
-        computer_answer = convert_indices_to_colors(random_guess)
+        # Otherwise, pick a random index from guesses array
+        guess = guesses[rand(guesses.length - 1)]
       end
 
-      puts "computer_answer = #{computer_answer}"
+      hint = check_guess_to_code(code, guess)
+    
+      puts "guess ##{guesses_count} = #{convert_to_colored_text(convert_indices_to_colors(guess))}; hint = #{convert_hint_to_colored_text(hint)} "
 
-      puts "hints = #{check_guess_to_code(code, computer_answer)}"
-
-      if check_guess_to_code(code,computer_answer) == ['O', 'O', 'O', 'O']
-        puts " it was ['O', 'O', 'O', 'O'] so yaaaay it's correct"
+      if hint == ['O', 'O', 'O', 'O']
+        # If it's correct, end
         is_guess_correct = true
-      elsif check_guess_to_code(code,computer_answer) == ['-', '-', '-', '-']
-        puts "it was ['-', '-', '-', '-']"
-        indiced_computer_answer = convert_colors_to_indices(computer_answer)
 
-        guesses_with_wrongs = []
+      elsif hint == ['-', '-', '-', '-']
+        # If it's all wrong, delete any guesses with the indices 
+        guess = guess.uniq
+        wrong_guesses = []
 
-        indiced_computer_answer.each do |element|
-          guesses.each do |guess|
-            if guess.include?(element)
-              guesses_with_wrongs.push(guess)
+        guess.each do |guess_element|
+          guesses.each do |guesses_element|
+            if guesses_element.include?(guess_element)
+              wrong_guesses.push(guesses_element)
             end
           end
         end
+        guesses = guesses - wrong_guesses
+      
+      elsif hint.include?('-') == false && combination_array.length < 1
+        # If no colors are wrong (but some are in the wrong position),
 
-        guesses = guesses - guesses_with_wrongs
-        # puts 'guesses after all them removed'
-        # print guesses.map{|element| element.join("")}
-
-      elsif check_guess_to_code(code,computer_answer).include?("X") == false
-        puts "the hint had no Xs"
-
-        guesses.delete_at(guesses.find_index(convert_colors_to_indices(computer_answer)))
-
-        guesses_with_rights = []
+        number_of_combinations = case guess.uniq.length
+        when 4 then 24 # 4 unique digits = 24 possible combos
+        when 3 then 12 # 3 unique digits = 12 possible combos
+        when 2 then 4 # 2 unique digits = 4 possible combos
+        end
         
-        indiced_computer_answer = convert_colors_to_indices(computer_answer)
-        puts "indiced_computer_answer = #{indiced_computer_answer}"
-
-        guesses.each do |guess|
-          # puts "*****"
-          # puts "guess = #{guess}"
-          # puts "indiced_computer_answer = #{indiced_computer_answer}"
-          # puts "guess.difference(indiced_computer_answer) == #{guess.difference(indiced_computer_answer)}"
-          
-          if guess.difference(indiced_computer_answer).length < 1
-            # puts "true so guess of #{guess} is pushed to guesses_with_rights"
-            guesses_with_rights.push(guess)
+        # return an array of the combination of all the possible answers
+        while combination_array.length < number_of_combinations do
+          shuffled_guess = guess.shuffle
+          if combination_array.include?(shuffled_guess) == false
+            combination_array.push(shuffled_guess)
           end
         end
 
-        # print guesses_with_rights.map{|element| element.join("")}
-        # puts ""
-        # puts "indiced_computer_answer = #{indiced_computer_answer}"
-
-        # indiced_computer_answer.each do |element|
-        #   puts "the element is #{element}"
-        #   guesses.each do |guess|
-        #     puts "the guess is #{guess}"
-        #     if guess.include?(element)
-        #       puts "#{guess} includes #{element} and is pushed to guesses_with_rights"
-        #       guesses_with_rights.push(guess)
-        #     end
-        #   end
-        # end
-
-        # puts "not included"
-        # print (guesses - guesses_with_rights).map{|element| element.join("")}
-        # puts "guesses_with_rights = "
-        # print guesses_with_rights.map{|element| element.join("")}
-        # guesses = []
-        # guesses = guesses_with_rights
-        # puts "guesses is now"
-        # print guesses.map{|element| element.join("")}
-        guesses = guesses_with_rights
-        puts "guesses is now"
-        print guesses.map{|element| element.join("")}
-        puts ""
-        puts "indiced_computer_answer = #{indiced_computer_answer}"
-        # is_guess_correct = true
+        guesses = combination_array
+      
       else
-        puts "elseeee delete that one item"
-        puts "the index of computer_answer #{computer_answer} in guesses is #{guesses.find_index
-        (convert_colors_to_indices(computer_answer))}"
-        
-        guesses.delete_at(guesses.find_index(convert_colors_to_indices(computer_answer)))
+        # Else just delete the guess we did
+        guesses.delete_at(guesses.find_index(guess))
+        puts "guesses is now #{guesses.length} long"
       end
-      puts "now guesses is #{guesses.length} long"
-      # print guesses.map{|element| element.join("").to_i}
-    end
-    return computer_answer
-  end
 
-  # TODO:// FIX THIS BRO
+      guesses_count += 1
+    end
+
+    return convert_indices_to_colors(guess)
+  end
+  
   def check_guess_to_code(code_arr, guess_arr)
     hints_array = []
-    
-    guess_arr.each_with_index do |element, index|
-      if element == code_arr[index]
+    guess = guess_arr
+    temp_code_arr = []
+    code_arr.map{|element| temp_code_arr.push(element)}
+
+    if guess_arr[0].class == Integer
+      guess = convert_indices_to_colors(guess_arr)
+    end
+
+    guess.each_with_index do |element, index|
+      if element == temp_code_arr[index]
         hints_array.push("O")
-      elsif code_arr.include?(element)
+        temp_code_arr[index] = nil
+      elsif temp_code_arr.include?(element)
         hints_array.push("X")
+        temp_code_arr[temp_code_arr.find_index(element)] = nil
       else
         hints_array.push("-")
       end
     end
+
     return hints_array.shuffle!
   end
 
@@ -215,7 +185,7 @@ class Game
     4.times do
       code.push(COLORS[rand(6)])
     end
-    puts "The secret code is #{convert_to_colored_text(code)}"
+    # puts "The secret code is #{convert_to_colored_text(code)} which is #{convert_colors_to_indices(code)}"
     return code
   end
 
