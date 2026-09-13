@@ -38,4 +38,18 @@ RSpec.describe 'Mastermind Game' do
       expect(has_789).to eq(false)
     end
   end
+  describe 'computer guesses player code' do
+    it 'should create a color array from number array' do
+      test_number_array = [1,1,2,2]
+      expect(subject.convert_indices_to_colors(test_number_array)).to eq(["G", "G", "B", "B"])
+    end
+    it 'should create an indices array from color array' do
+      test_color_array = ["R", "C", "G", "R"]
+      expect(subject.convert_colors_to_indices(test_color_array)).to eq([0,3,1,0])
+    end
+    it 'should stop when the guess matches the code' do
+      test_code = subject.create_code
+      expect(subject.computer_guess(test_code)).to eq(test_code)
+    end
+  end
 end
