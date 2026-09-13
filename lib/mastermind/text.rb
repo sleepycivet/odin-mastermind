@@ -18,6 +18,7 @@ module Text
     puts " "
     puts "#{colorize_correct} means that there is one correct color in the correct place"
     puts "#{colorize_almost_correct} means that there is one correct color but in the wrong place"
+    puts "#{colorize_wrong} means that there is one with the wrong color."
     puts " "
     puts "Good luck!"
     puts "**********"
