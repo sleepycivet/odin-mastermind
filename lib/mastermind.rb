@@ -14,6 +14,17 @@ class Game
   def start_game
     text_game_rules
 
+    game_type = prompt_game_type
+
+    if game_type == 'player'
+    elsif game_type == 'computer'
+      text_player_guess_game
+      player_guess
+    end
+
+  end
+
+  def player_guess
     code = create_code
     guess = nil
 

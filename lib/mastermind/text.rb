@@ -27,4 +27,8 @@ module Text
     puts 'Type "player" if you would like to choose the code and the computer will guess.'
     puts 'Type "computer" if you would like the computer to choose the code and you will guess.'
   end
+
+  def text_player_guess_game
+    puts "You chose to guess the code selected by the computer."
+  end
 end
