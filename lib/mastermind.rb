@@ -1,9 +1,11 @@
 require 'colorize'
 require 'colorized_string'
 require_relative './mastermind/text'
+require_relative './mastermind/display'
 
 class Game
   include Text
+  include Display
 
   def start_game
     text_game_rules
@@ -230,11 +232,11 @@ class Game
     array.each do |element|
       case element
       when 'O'
-        color_string.concat("#{correct}")
+        color_string.concat("#{display_correct}")
       when '-'
-        color_string.concat("#{almost_correct}")
+        color_string.concat("#{display_almost_correct}")
       when 'X'
-        color_string.concat("#{wrong}")
+        color_string.concat("#{display_wrong}")
       end
     end
     return color_string
@@ -245,17 +247,17 @@ class Game
     array.each_with_index do |element, index|
       case element
       when 'R'
-        color_string.concat("#{red}")
+        color_string.concat("#{display_red}")
       when 'G'
-        color_string.concat("#{green}")
+        color_string.concat("#{display_green}")
       when 'B'
-        color_string.concat("#{blue}")
+        color_string.concat("#{display_blue}")
       when 'C'
-        color_string.concat("#{cyan}")
+        color_string.concat("#{display_cyan}")
       when 'M'
-        color_string.concat("#{magenta}")
+        color_string.concat("#{display_magenta}")
       when 'Y'
-        color_string.concat("#{yellow}")
+        color_string.concat("#{display_yellow}")
       end
 
       if index < (array.length - 1)
@@ -280,42 +282,5 @@ class Game
 
   def initialize
     @guesses_count = 0
-  end
-
-  # This can probably be broken out into its own class?
-  def red
-    return " R ".colorize(:background => :red)
-  end
-
-  def green
-    return " G ".colorize(:background => :green)
-  end
-  
-  def blue
-    return " B ".colorize(:background => :blue)
-  end
-
-  def cyan
-    return " C ".colorize(:background => :cyan)
-  end
-
-  def magenta
-    return " M ".colorize(:background => :magenta)
-  end
-
-  def yellow
-    return " Y ".colorize(:background => :yellow)
-  end
-
-  def correct
-    return " X ".colorize(:black).colorize(:background => :white)
-  end
-
-  def almost_correct
-    return ColorizedString[" X "].colorize(:black).colorize(:background => :light_red)
-  end
-
-  def wrong
-    return ColorizedString[" - "].colorize(:black).colorize(:background => :gray)
   end
 end
