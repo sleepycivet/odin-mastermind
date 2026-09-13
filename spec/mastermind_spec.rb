@@ -30,7 +30,7 @@ RSpec.describe 'Mastermind Game' do
       has_6789 = false
       guesses.each do |element|
         element.each do |item|
-          if item > 6
+          if item > 5
             has_6789 = true
           end
         end
