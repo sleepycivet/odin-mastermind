@@ -18,9 +18,7 @@ class Game
     guess = nil
 
     loop do
-      while guess.class != Array do
-        guess = prompt_guess
-      end
+      guess = prompt_guess
 
       @guesses_count += 1
 

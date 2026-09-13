@@ -3,10 +3,6 @@ require_relative './colorize'
 module Text
   include Colorize
 
-  def text_prompt_guess
-    puts "Please enter four of the following letters for your guess #{colorize_red}, #{colorize_green}, #{colorize_blue}, #{colorize_cyan}, #{colorize_magenta}, or #{colorize_yellow})."
-  end
-
   def text_game_rules
     puts "WELCOME TO MASTERMIND!"
     puts " "
@@ -19,8 +15,16 @@ module Text
     puts "#{colorize_correct} means that there is one correct color in the correct place"
     puts "#{colorize_almost_correct} means that there is one correct color but in the wrong place"
     puts "#{colorize_wrong} means that there is one with the wrong color."
-    puts " "
-    puts "Good luck!"
     puts "**********"
+  end
+
+  def text_prompt_guess
+    puts "Please enter four of the following letters for your guess #{colorize_red}, #{colorize_green}, #{colorize_blue}, #{colorize_cyan}, #{colorize_magenta}, or #{colorize_yellow})."
+  end
+
+  def text_prompt_game_type
+    puts 'What type of game would you like to play?'
+    puts 'Type "player" if you would like to choose the code and the computer will guess.'
+    puts 'Type "computer" if you would like the computer to choose the code and you will guess.'
   end
 end
