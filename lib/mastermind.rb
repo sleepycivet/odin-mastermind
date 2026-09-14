@@ -92,6 +92,59 @@ class Game
     return possible_codes
   end
 
+  def computer_guess_easy(code)
+    @game_difficulty = 'easy' # for testing
+    is_guess_correct = false
+  
+    guesses_indices_array = [
+      [0,1,2,3,4,5],
+      [0,1,2,3,4,5],
+      [0,1,2,3,4,5],
+      [0,1,2,3,4,5]
+    ]
+    # pos0 = [0,1,2,3,4,5]
+    # pos1 = [0,1,2,3,4,5]
+    # pos2 = [0,1,2,3,4,5]
+    # pos3 = [0,1,2,3,4,5]
+
+    guess = [0,0,1,1]
+
+    while is_guess_correct == false do
+      hint = check_guess_to_code(code, guess)
+      puts "code = #{code}"
+      puts "guess = #{guess} which is #{convert_indices_to_colors(guess)}"
+      puts "hint = #{hint}"
+      puts "guess_indices_array starts at"
+      p guesses_indices_array
+
+      if hint == ['O', 'O', 'O', 'O']
+        puts "it's all correct!!!"
+        is_guess_correct = true
+      else
+        hint.each_with_index do |element, index|
+          puts "hint at index #{index} = #{element}"
+          if element == 'O'
+            puts "element = 'O'"
+            guesses_indices_array[index] = [guess[index]]
+            puts "guesses_indices_array now equals"
+            p guesses_indices_array
+          elsif element == 'X'
+            guesses_indices_array[index].delete_at(guesses_indices_array[index].find_index(guess[index]))
+            guesses_indices_array.each
+          end
+        end
+      end
+      is_guess_correct = true # stop loop for testing
+    end
+
+    # Another way to implement this guessing is to have an array of possible indices for each position.
+    # If it returns 'O' for that position, throw out all other elements in the indices array
+    # If it returns 'X' select that element for a different location
+    # If it returns '-' remove that element from indices array
+    # Otherwise, choose a random index from the indices array for a guess
+    return convert_indices_to_colors(guess)
+  end
+
   def computer_guess_hard(code)
     is_guess_correct = false
     guess = nil # actual value

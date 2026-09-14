@@ -59,25 +59,25 @@ RSpec.describe 'Mastermind Game' do
     end
   end
   describe 'hard mode: computer guesses player code' do
-    xit 'should create a color array from number array' do
+    it 'should create a color array from number array' do
       test_number_array = [1,1,2,2]
       expect(subject.convert_indices_to_colors(test_number_array)).to eq(["G", "G", "B", "B"])
     end
-    xit 'should create an indices array from color array' do
+    it 'should create an indices array from color array' do
       test_color_array = ["R", "C", "G", "R"]
       expect(subject.convert_colors_to_indices(test_color_array)).to eq([0,3,1,0])
     end
-    xit 'should stop when the guess matches a given code' do
+    it 'should stop when the guess matches a given code' do
       test_code = ["R", "C", "G", "R"]
       expect(subject.computer_guess_hard(test_code)).to eq(test_code)
     end
-    xit 'should stop when the guess matches a randomly generated code' do
+    it 'should stop when the guess matches a randomly generated code' do
       test_code = subject.create_code
       expect(subject.computer_guess_hard(test_code)).to eq(test_code)
     end
   end
   describe 'easy mode: computer guesses player code' do
-    xit 'should stop when the guess matches a given code (default answer)' do
+    it 'should stop when the guess matches a given code (default answer)' do
       test_code = ["R", "R", "G", "G"]
       expect(subject.computer_guess_easy(test_code)).to eq(test_code)
     end
