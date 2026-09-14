@@ -1,8 +1,9 @@
 require_relative 'colorize'
+require_relative 'constants'
 
 module Convert
   include Colorize
-  COLORS = ["R", "G", "B", "C", "M", "Y"]
+  include Constants
 
   def convert_hint_to_colored_text(array)
     color_string = ""
@@ -48,7 +49,7 @@ module Convert
     color_array = []
 
     array.each do |element|
-      color_array.push(COLORS[element])
+      color_array.push(all_colors[element])
     end
     return color_array
   end
@@ -56,7 +57,7 @@ module Convert
   def convert_colors_to_indices(array)
     indices_array = []
       array.each do |element|
-      indices_array.push(COLORS.find_index(element))
+      indices_array.push(all_colors.find_index(element))
     end
     return indices_array
   end
