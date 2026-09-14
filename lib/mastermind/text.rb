@@ -43,4 +43,12 @@ module Text
   def text_player_code
     return "The code you chose is: "
   end
+
+  def text_guess_and_hint(guess_nr, guess, hint)
+    number = guess_nr
+    if guess_nr < 10
+      number = "0" + guess_nr.to_s
+    end
+    puts "Guess ##{number}: " +  convert_to_colored_text(guess) + " = Hint: " + convert_hint_to_colored_text(hint)
+  end
 end

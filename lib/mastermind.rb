@@ -41,7 +41,7 @@ class Game
 
       @guesses_count += 1
 
-      puts "Guess ##{@guesses_count}: " +  convert_to_colored_text(guess) + " = Hint: " + convert_hint_to_colored_text(check_guess_to_code(code, guess))
+      text_guess_and_hint(@guesses_count, guess, check_guess_to_code(code, guess))
 
       break if @guesses_count == 13 || check_guess_to_code(code, guess) == ["O", "O", "O", "O"]
 
@@ -107,8 +107,8 @@ class Game
       end
 
       hint = check_guess_to_code(code, guess)
-    
-      puts "guess ##{guesses_count} = #{convert_to_colored_text(convert_indices_to_colors(guess))}; hint = #{convert_hint_to_colored_text(hint)} "
+
+      text_guess_and_hint(guesses_count, convert_indices_to_colors(guess), hint)
 
       if hint == ['O', 'O', 'O', 'O']
         # If it's correct, end
