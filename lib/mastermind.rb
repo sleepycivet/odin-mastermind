@@ -4,12 +4,14 @@ require_relative './mastermind/text'
 require_relative './mastermind/colorize'
 require_relative 'mastermind/convert'
 require_relative 'mastermind/prompt'
+require_relative 'mastermind/constants'
 
 class Game
   include Text
   include Colorize
   include Convert
   include Prompt
+  include Constants
 
   def start_game
     text_game_rules
@@ -179,14 +181,13 @@ class Game
   def create_code
     code = []
     4.times do
-      code.push(COLORS[rand(6)])
+      code.push(all_colors[rand(6)])
     end
     return code
   end
 
 
   protected
-  COLORS = ["R", "G", "B", "C", "M", "Y"]
 
   def initialize
     @guesses_count = 0

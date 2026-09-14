@@ -1,8 +1,9 @@
 require_relative 'text'
+require_relative 'constants'
 
 module Prompt
   include Text
-  COLORS = ["R", "G", "B", "C", "M", "Y"]
+  include Constants
 
   def prompt_guess
     text_prompt_guess
@@ -15,7 +16,7 @@ module Prompt
       rescue
         puts "Not a valid input."
       else
-        if input.length == 4 && COLORS.include?(input[0]) && COLORS.include?(input[1]) && COLORS.include?(input[2]) && COLORS.include?(input[3])
+        if input.length == 4 && all_colors.include?(input[0]) && all_colors.include?(input[1]) && all_colors.include?(input[2]) && all_colors.include?(input[3])
           guess = input
         else
           puts "Not a valid input."
