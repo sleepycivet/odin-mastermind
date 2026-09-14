@@ -164,7 +164,7 @@ class Game
   end
   
   def check_guess_to_code(code_arr, guess_arr)
-    hints_array = []
+    hints_array = [nil, nil, nil, nil]
     guess = guess_arr
     temp_code_arr = []
     code_arr.map{|element| temp_code_arr.push(element)}
@@ -172,19 +172,32 @@ class Game
     if guess_arr[0].class == Integer
       guess = convert_indices_to_colors(guess_arr)
     end
-
+    
+    # Evaluate and remove exact matches (right color, right location)
     guess.each_with_index do |element, index|
       if element == temp_code_arr[index]
-        hints_array.push("O")
+        hints_array[index] = "O"
         temp_code_arr[index] = nil
-      elsif temp_code_arr.include?(element)
-        hints_array.push("X")
-        temp_code_arr[temp_code_arr.find_index(element)] = nil
-      else
-        hints_array.push("-")
       end
     end
 
+    # Find and remove almost correct matches (right color, wrong location)
+    guess.each_with_index do |element,index|
+      if hints_array[index] == 'O'
+      elsif temp_code_arr.include?(element)
+        hints_array[index] = "X"
+        temp_code_arr[temp_code_arr.find_index(element)] = nil
+      end
+    end
+
+    # Fill the rest of hints_array with wrong answer markers
+    hints_array.each_with_index do |element, index|
+      if element == nil
+        hints_array[index] = "-"
+      end
+    end
+
+    # Shuffle the hints array if the game difficulty is hard
     if @game_difficulty == 'hard'
       return hints_array.shuffle!
     else
@@ -205,6 +218,6 @@ class Game
 
   def initialize
     @guesses_count = 0
-    @game_difficulty = 'hard'
+    @game_difficulty = 'easy'
   end
 end
