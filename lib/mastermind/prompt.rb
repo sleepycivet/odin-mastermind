@@ -7,8 +7,7 @@ module Prompt
   include Constants
   include Validate
 
-  def prompt_guess
-    text_prompt_guess
+  def prompt_rgbcmy
     guess = nil
 
     while guess.class != Array do

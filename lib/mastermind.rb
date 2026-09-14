@@ -19,6 +19,11 @@ class Game
     game_type = prompt_game_type
 
     if game_type == 'player'
+      text_computer_guess_game
+      text_prompt_code
+      player_code = prompt_rgbcmy
+      puts text_player_code + convert_to_colored_text(player_code)
+      computer_guess(player_code)
     elsif game_type == 'computer'
       text_player_guess_game
       player_guess
@@ -31,7 +36,8 @@ class Game
     guess = nil
 
     loop do
-      guess = prompt_guess
+      text_prompt_guess
+      guess = prompt_rgbcmy
 
       @guesses_count += 1
 
@@ -144,7 +150,6 @@ class Game
       else
         # Else just delete the guess we did
         guesses.delete_at(guesses.find_index(guess))
-        puts "guesses is now #{guesses.length} long"
       end
 
       guesses_count += 1

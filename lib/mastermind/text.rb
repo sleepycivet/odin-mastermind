@@ -31,4 +31,16 @@ module Text
   def text_player_guess_game
     puts "You chose to guess the code selected by the computer."
   end
+
+  def text_computer_guess_game
+    puts "You choose the code and the computer will guess it."
+  end
+
+  def text_prompt_code
+    puts "Please enter four of the following letters to create a code for the computer to guess: #{colorize_red}, #{colorize_green}, #{colorize_blue}, #{colorize_cyan}, #{colorize_magenta}, or #{colorize_yellow})."
+  end
+
+  def text_player_code
+    return "The code you chose is: "
+  end
 end
