@@ -1,9 +1,11 @@
 require_relative 'text'
 require_relative 'constants'
+require_relative 'validate'
 
 module Prompt
   include Text
   include Constants
+  include Validate
 
   def prompt_guess
     text_prompt_guess
@@ -16,7 +18,7 @@ module Prompt
       rescue
         puts "Not a valid input."
       else
-        if input.length == 4 && all_colors.include?(input[0]) && all_colors.include?(input[1]) && all_colors.include?(input[2]) && all_colors.include?(input[3])
+        if input.length == 4 && validate_rgbcmy(input)
           guess = input
         else
           puts "Not a valid input."
