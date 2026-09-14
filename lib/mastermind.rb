@@ -17,15 +17,21 @@ class Game
     text_game_rules
 
     game_type = prompt_game_type
+    @game_difficulty = prompt_difficulty
 
     if game_type == 'player'
       text_computer_guess_game
+      text_game_difficulty(@game_difficulty)
       text_prompt_code
       player_code = prompt_rgbcmy
       puts text_player_code + convert_to_colored_text(player_code)
-      computer_guess(player_code)
+      if @game_difficulty == 'hard'
+        computer_guess_hard(player_code)
+      elsif @game_difficulty == 'easy'
+      end
     elsif game_type == 'computer'
       text_player_guess_game
+      text_game_difficulty(@game_difficulty)
       player_guess
     end
 
@@ -86,7 +92,7 @@ class Game
     return possible_codes
   end
 
-  def computer_guess(code)
+  def computer_guess_hard(code)
     is_guess_correct = false
     guess = nil # actual value
     guesses_count = 1
@@ -94,7 +100,6 @@ class Game
 
     # Create a guesses array of all possible codes
     guesses = generate_guesses
-    puts "guesses.length = #{guesses.length}"
 
     while is_guess_correct == false do
 
@@ -180,7 +185,11 @@ class Game
       end
     end
 
-    return hints_array.shuffle!
+    if @game_difficulty == 'hard'
+      return hints_array.shuffle!
+    else
+      return hints_array
+    end
   end
 
   def create_code
@@ -196,5 +205,6 @@ class Game
 
   def initialize
     @guesses_count = 0
+    @game_difficulty = 'hard'
   end
 end

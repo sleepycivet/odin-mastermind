@@ -47,7 +47,29 @@ module Prompt
         end
       end
     end
-
     return game_type
   end
+
+  def prompt_difficulty
+    text_prompt_difficulty
+    difficulty_type = nil
+    
+    while difficulty_type == nil do
+      begin
+      input = gets.upcase.to_s.chomp
+      rescue
+        puts 'Please type "easy" or "hard" to choose the game difficulty.'
+      else
+        if input == 'EASY'
+          difficulty_type = 'easy'
+        elsif input == 'HARD'
+          difficulty_type = 'hard'
+        else
+          puts 'Please type "player" or "computer" to choose the game type.'
+        end
+      end
+    end
+    return difficulty_type
+  end
+
 end

@@ -28,6 +28,16 @@ module Text
     puts 'Type "computer" if you would like the computer to choose the code and you will guess.'
   end
 
+  def text_prompt_difficulty
+    puts 'What would you like the difficulty of the game to be?'
+    puts 'Type "easy" if you want the hints to correspond to the order of colors in your guess.'
+    puts 'Type "hard" if you want the hints to be in a random order.'
+  end
+
+  def text_game_difficulty(difficulty)
+    puts "You chose the game difficulty of #{difficulty}."
+  end
+
   def text_player_guess_game
     puts "You chose to guess the code selected by the computer."
   end
