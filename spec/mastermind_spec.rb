@@ -1,4 +1,5 @@
-require './lib/mastermind.rb'
+require_relative '../../odin-mastermind/lib/mastermind'
+
 RSpec.describe 'Mastermind Game' do
   subject { Game.new}
   describe 'create secret code' do
@@ -57,6 +58,12 @@ RSpec.describe 'Mastermind Game' do
       expected_result = ["O", "-", "-", "O"]
       expect(subject.check_guess_to_code(test_code, test_guess)).to eq(expected_result)
     end
+    it 'should evaluate guess [RRGG] against code [GCCG] to [--XX]' do
+      test_guess = ["R", "R", "G", "G"]
+      test_code = ["G", "C", "C", "G"]
+      expected_result = ["-", "-", "X", "O"]
+      expect(subject.check_guess_to_code(test_code, test_guess)).to eq(expected_result)
+    end
   end
   describe 'hard mode: computer guesses player code' do
     it 'should create a color array from number array' do
@@ -79,6 +86,10 @@ RSpec.describe 'Mastermind Game' do
   describe 'easy mode: computer guesses player code' do
     it 'should stop when the guess matches a given code (default answer)' do
       test_code = ["R", "R", "G", "G"]
+      expect(subject.computer_guess_easy(test_code)).to eq(test_code)
+    end
+    it 'should stop when the guess matches a randomly generated code' do
+      test_code = subject.create_code
       expect(subject.computer_guess_easy(test_code)).to eq(test_code)
     end
   end

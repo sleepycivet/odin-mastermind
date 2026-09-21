@@ -28,6 +28,7 @@ class Game
       if @game_difficulty == 'hard'
         computer_guess_hard(player_code)
       elsif @game_difficulty == 'easy'
+        computer_guess_easy(player_code)
       end
     elsif game_type == 'computer'
       text_player_guess_game
@@ -94,58 +95,77 @@ class Game
 
   def computer_guess_easy(code)
     @game_difficulty = 'easy' # for testing
-    is_guess_correct = false
-  
-    guesses_indices_array = [
+    guess_pool = [
       [0,1,2,3,4,5],
       [0,1,2,3,4,5],
       [0,1,2,3,4,5],
       [0,1,2,3,4,5]
     ]
-    # pos0 = [0,1,2,3,4,5]
-    # pos1 = [0,1,2,3,4,5]
-    # pos2 = [0,1,2,3,4,5]
-    # pos3 = [0,1,2,3,4,5]
+    is_guess_correct = false
+    guess = nil
+    hint = nil
 
-    guess = [0,0,1,1]
-
-    while is_guess_correct == false do
-      hint = check_guess_to_code(code, guess)
-      puts "code = #{code}"
-      puts "guess = #{guess} which is #{convert_indices_to_colors(guess)}"
-      puts "hint = #{hint}"
-      puts "guess_indices_array starts at"
-      p guesses_indices_array
-
-      if hint == ['O', 'O', 'O', 'O']
-        puts "it's all correct!!!"
-        is_guess_correct = true
-      else
-        hint.each_with_index do |element, index|
-          puts "hint at index #{index} = #{element}"
-          if element == 'O'
-            puts "element = 'O'"
-            guesses_indices_array[index] = [guess[index]]
-            puts "guesses_indices_array now equals"
-            p guesses_indices_array
-          elsif element == 'X'
-            guesses_indices_array[index].delete_at(guesses_indices_array[index].find_index(guess[index]))
-            guesses_indices_array.each
+    # Start guess loop
+    until is_guess_correct == true || @guesses_count >= 12 do
+       # Set guess
+      if guess == nil # if it's the first loop
+        guess = [0,0,1,1]
+      else # Populate 'nil' with numbers
+        guess.each_with_index do |guess_element, guess_index|
+          pool_element = guess_pool[guess_index]
+          random_index = rand(pool_element.length - 1)
+          if guess_element == nil
+            guess[guess_index] = pool_element[random_index]
           end
         end
       end
-      is_guess_correct = true # stop loop for testing
-    end
+      
+      # Generate hint from guess
+      hint = check_guess_to_code(code, guess)
 
-    # Another way to implement this guessing is to have an array of possible indices for each position.
-    # If it returns 'O' for that position, throw out all other elements in the indices array
-    # If it returns 'X' select that element for a different location
-    # If it returns '-' remove that element from indices array
-    # Otherwise, choose a random index from the indices array for a guess
+      text_guess_and_hint(@guesses_count, convert_indices_to_colors(guess), hint)
+      # Assess guess based on hint
+      if hint == ["O", "O", "O", "O"] # All correct
+        is_guess_correct = true
+      elsif hint == ["-", "-", "-", "-"] # All wrong
+        guess_pool.each_with_index do |pool_element, pool_index| # remove the guesses from the pool for each index
+          guess_element_index = pool_element.find_index(guess[pool_index]) # within the corresponding index of guess_pool, find guess at the same index
+          if guess_element_index != nil
+            guess_pool[pool_index].delete_at(guess_element_index)
+          end
+          guess = [nil, nil, nil, nil] # Set guess to nil, so that guess can be populated with numbers.
+        end
+      else # If not all wrong and not all correct, it'll be some combination of right and wrong
+
+        guess_pool.each_with_index do |pool_element, pool_index|
+          hint_element = hint[pool_index] #Hint at same index
+          guess_element = guess[pool_index] #Guess at same index
+
+          if hint_element == "O" #Correct
+            pool_element = [guess_element]
+          elsif hint_element == "-" #Wrong
+            pool_element.delete_at(pool_element.find_index(guess_element)) #Remove guess_element from pool_element
+            guess[pool_index] = nil
+          elsif hint_element == "X" #Almost correct
+            pool_element.delete_at(pool_element.find_index(guess_element))
+
+            guess.each_with_index do |guess_e, guess_i| # Look for the next nil in guess and set to guess_element if it's in the corresponding pool_element
+              if guess_e == nil && guess_pool[guess_i].include?(guess_element)
+                guess[guess_i] = guess_element
+              end
+            end
+            guess[pool_index] = nil
+          end
+        end
+      end
+      @guesses_count += 1
+    end
     return convert_indices_to_colors(guess)
+
   end
 
   def computer_guess_hard(code)
+    @game_difficulty = 'hard'
     is_guess_correct = false
     guess = nil # actual value
     guesses_count = 1
@@ -185,7 +205,6 @@ class Game
           end
         end
         guesses = guesses - wrong_guesses
-      
       elsif hint.include?('-') == false && combination_array.length < 1
         # If no colors are wrong (but some are in the wrong position),
 
