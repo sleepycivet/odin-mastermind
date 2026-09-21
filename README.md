@@ -7,3 +7,5 @@ Whew! That was tough. The random guessing of the "hard" version of the game was 
 Well, first, I didn't use variables which sort of underscored the necessity for using variables for clarity. Second, the importance (and difficulty) of naming the variable, itself, was also brought to light.
 
 Though it was probably unnecessary to create two different difficulties for the game, I found it very instructive to figure out how to create code to guess both methods.
+
+I also learned a lot about structuring my files for legibility since the game was quite complicated. I decided to split the file by function and prefix the method with the name of the file/module for ease of tracing where it came from and I found it really helpful.
